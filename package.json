@@ -1,0 +1,26 @@
+{
+  "name": "simulador-de-procesos-y-memoria",
+  "version": "1.0.0",
+  "description": "Simulador de procesos y memoria con POO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camicastilloo/Simulador-de-procesos-y-memoria.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/camicastilloo/Simulador-de-procesos-y-memoria/issues"
+  },
+  "homepage": "https://github.com/camicastilloo/Simulador-de-procesos-y-memoria#readme",
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}
