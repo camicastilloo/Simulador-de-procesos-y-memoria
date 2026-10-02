@@ -21,4 +21,19 @@ describe("SimuladorProcesos", () => {
 
     expect(() => simulador.configurar(1000, 0)).toThrow();
   });
+  test("inicializa la memoria completa como libre", () => {
+  const simulador = new SimuladorProcesos();
+
+  simulador.configurar(1000, 3);
+
+  expect(simulador.obtenerMemoria()).toBe(1000);
+});
+
+test("inicializa el CPU libre", () => {
+  const simulador = new SimuladorProcesos();
+
+  simulador.configurar(1000, 3);
+
+  expect(simulador.obtenerProcesoCPU()).toBe(null);
+});
 });
