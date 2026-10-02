@@ -101,6 +101,13 @@ tick(): void {
     this.planificadorCPU.finalizarProceso();
     this.gestorMemoria.liberarMemoria(procesoActual);
   }
+  else if (this.planificadorCPU.quantumVencido()) {
+  if (this.planificadorCPU.obtenerColaListos().length > 0) {
+    this.planificadorCPU.reencolarPorQuantum();
+  } else {
+    this.planificadorCPU.renovarQuantum();
+  }
+}
 
   this.tickActual++;
 }

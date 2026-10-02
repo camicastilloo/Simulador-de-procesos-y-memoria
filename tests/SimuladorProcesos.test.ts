@@ -149,4 +149,40 @@ test("admite un proceso esperando después de liberar memoria", () => {
 
   expect(proceso2.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
 });
+
+test("reencola el proceso cuando vence el quantum", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso1 = new Proceso(1, 200, 5);
+  const proceso2 = new Proceso(2, 200, 5);
+
+  simulador.configurar(1000, 2);
+  simulador.registrarProceso(proceso1);
+  simulador.registrarProceso(proceso2);
+
+  simulador.tick();
+  simulador.tick();
+
+  expect(proceso1.obtenerEstado()).toBe(EstadoProceso.LISTO);
+  expect(simulador.obtenerProcesoCPU()).toBe(null);
+
+  simulador.tick();
+
+  expect(simulador.obtenerProcesoCPU()).toBe(proceso2);
+  expect(proceso2.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+});
+
+test("renueva el quantum si no hay otro proceso listo", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 5);
+
+  simulador.configurar(1000, 2);
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+  simulador.tick();
+
+  expect(simulador.obtenerProcesoCPU()).toBe(proceso);
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+  expect(proceso.obtenerQuantumConsumido()).toBe(0);
+});
 });
