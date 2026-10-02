@@ -13,4 +13,5 @@ export interface ISimuladorProcesos {
   obtenerTick(): number;
   obtenerMemoria(): number;
   obtenerProcesoCPU(): unknown | null;
+  tick(): void;
 }

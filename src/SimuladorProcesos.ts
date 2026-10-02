@@ -71,6 +71,27 @@ export class SimuladorProcesos implements ISimuladorProcesos {
   this.procesos.push(proceso);
 }
 
+tick(): void {
+  if (this.gestorMemoria === null || this.planificadorCPU === null) {
+    throw new Error("El simulador no está configurado");
+  }
+
+  for (const proceso of this.procesos) {
+    if (proceso.obtenerEstado() !== EstadoProceso.ESPERANDO_MEMORIA) {
+      continue;
+    }
+
+    const asignado = this.gestorMemoria.asignarMemoria(proceso);
+
+    if (asignado) {
+      proceso.cambiarEstado(EstadoProceso.LISTO);
+      this.planificadorCPU.agregarProceso(proceso);
+    }
+  }
+
+  this.tickActual++;
+}
+
   obtenerTick(): number {
     return this.tickActual;
   }

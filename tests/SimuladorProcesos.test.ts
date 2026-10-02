@@ -69,4 +69,13 @@ test("rechaza un PID repetido", () => {
 
   expect(() => simulador.registrarProceso(proceso2)).toThrow();
 });
+
+test("incrementa el tick al ejecutar un tick", () => {
+  const simulador = new SimuladorProcesos();
+
+  simulador.configurar(1000, 3);
+  simulador.tick();
+
+  expect(simulador.obtenerTick()).toBe(1);
+});
 });
