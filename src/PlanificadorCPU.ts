@@ -5,10 +5,12 @@ import { EstadoProceso } from "./EstadoProceso.js";
 export class PlanificadorCPU implements IPlanificadorCPU {
   private readonly colaListos: IProceso[];
   private procesoActual: IProceso | null;
+  private quantum: number;
 
   constructor() {
     this.colaListos = [];
     this.procesoActual = null;
+    this.quantum = 0;
   }
 
   agregarProceso(proceso: IProceso): void {
@@ -45,5 +47,28 @@ ejecutarUnidad(): void {
 
   this.procesoActual.consumirCPU();
   this.procesoActual.consumirQuantum();
+}
+
+configurarQuantum(quantum: number): void {
+  this.quantum = quantum;
+}
+
+finalizoProceso(): boolean {
+  if (this.procesoActual === null) {
+    return false;
+  }
+
+  return this.procesoActual.obtenerCPURestante() === 0;
+}
+
+quantumVencido(): boolean {
+  if (this.procesoActual === null) {
+    return false;
+  }
+
+  return (
+    this.procesoActual.obtenerQuantumConsumido() >=
+    this.quantum
+  );
 }
 }

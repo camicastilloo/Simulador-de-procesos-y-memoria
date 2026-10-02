@@ -6,4 +6,7 @@ export interface IPlanificadorCPU {
   obtenerColaListos(): IProceso[];
   despachar(): void;
   ejecutarUnidad(): void;
+  configurarQuantum(quantum: number): void;
+  finalizoProceso(): boolean;
+  quantumVencido(): boolean;
 }
