@@ -71,4 +71,24 @@ quantumVencido(): boolean {
     this.quantum
   );
 }
+
+reencolarPorQuantum(): void {
+  if (this.procesoActual === null) {
+    return;
+  }
+
+  this.procesoActual.cambiarEstado(EstadoProceso.LISTO);
+  this.procesoActual.reiniciarQuantum();
+
+  this.colaListos.push(this.procesoActual);
+  this.procesoActual = null;
+}
+
+renovarQuantum(): void {
+  if (this.procesoActual === null) {
+    return;
+  }
+
+  this.procesoActual.reiniciarQuantum();
+}
 }

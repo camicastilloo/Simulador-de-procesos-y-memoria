@@ -65,4 +65,44 @@ test("detecta cuando vence el quantum", () => {
 
   expect(planificador.quantumVencido()).toBe(true);
 });
+test("reencola el proceso cuando vence el quantum y hay otro listo", () => {
+  const planificador = new PlanificadorCPU();
+  const proceso1 = new Proceso(1, 100, 5);
+  const proceso2 = new Proceso(2, 100, 3);
+
+  planificador.configurarQuantum(2);
+  planificador.agregarProceso(proceso1);
+  planificador.agregarProceso(proceso2);
+  planificador.despachar();
+
+  planificador.ejecutarUnidad();
+  planificador.ejecutarUnidad();
+
+  planificador.reencolarPorQuantum();
+
+  expect(planificador.obtenerProcesoActual()).toBe(null);
+  expect(planificador.obtenerColaListos()).toEqual([
+    proceso2,
+    proceso1
+  ]);
+  expect(proceso1.obtenerEstado()).toBe(EstadoProceso.LISTO);
+});
+
+test("renueva el quantum cuando no hay otro proceso listo", () => {
+  const planificador = new PlanificadorCPU();
+  const proceso = new Proceso(1, 100, 5);
+
+  planificador.configurarQuantum(2);
+  planificador.agregarProceso(proceso);
+  planificador.despachar();
+
+  planificador.ejecutarUnidad();
+  planificador.ejecutarUnidad();
+
+  planificador.renovarQuantum();
+
+  expect(planificador.obtenerProcesoActual()).toBe(proceso);
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+  expect(proceso.obtenerQuantumConsumido()).toBe(0);
+});
 });
