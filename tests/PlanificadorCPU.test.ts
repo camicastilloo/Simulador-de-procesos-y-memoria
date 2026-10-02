@@ -121,4 +121,19 @@ test("finaliza el proceso y libera el CPU", () => {
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.TERMINADO);
   expect(planificador.obtenerProcesoActual()).toBe(null);
 });
+test("detecta cuando un proceso debe bloquearse", () => {
+  const planificador = new PlanificadorCPU();
+  const proceso = new Proceso(1, 100, 5);
+
+  proceso.configurarBloqueoCPU(2, 3);
+
+  planificador.agregarProceso(proceso);
+  planificador.despachar();
+
+  planificador.ejecutarUnidad();
+  expect(proceso.debeBloquearse()).toBe(false);
+
+  planificador.ejecutarUnidad();
+  expect(proceso.debeBloquearse()).toBe(true);
+});
 });

@@ -10,6 +10,8 @@ export class Proceso implements IProceso {
   private estado: EstadoProceso;
   private quantumConsumido: number;
   private bloqueoRestante: number;
+  private ticksParaBloqueo: number;
+  private duracionBloqueo: number;
 
   constructor(
     pid: number,
@@ -19,11 +21,12 @@ export class Proceso implements IProceso {
     this.pid = pid;
     this.memoriaRequerida = memoriaRequerida;
     this.tiempoTotalCPU = tiempoTotalCPU;
-
     this.cpuRestante = tiempoTotalCPU;
     this.estado = EstadoProceso.NUEVO;
     this.quantumConsumido = 0;
     this.bloqueoRestante = 0;
+    this.ticksParaBloqueo = 0;
+    this.duracionBloqueo = 0;
   }
 
   obtenerPid(): number {
@@ -79,4 +82,15 @@ export class Proceso implements IProceso {
       this.bloqueoRestante--;
     }
   }
+  configurarBloqueoCPU(ticksCPU: number, duracion: number): void {
+  this.ticksParaBloqueo = ticksCPU;
+  this.duracionBloqueo = duracion;
+}
+
+debeBloquearse(): boolean {
+  return (
+    this.ticksParaBloqueo > 0 &&
+    this.quantumConsumido >= this.ticksParaBloqueo
+  );
+}
 }

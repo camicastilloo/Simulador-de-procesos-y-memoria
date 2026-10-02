@@ -15,4 +15,6 @@ export interface IProceso {
   consumirQuantum(): void;
   iniciarBloqueo(duracion: number): void;
   disminuirBloqueo(): void;
+  configurarBloqueoCPU(ticksCPU: number, duracion: number): void;
+  debeBloquearse(): boolean;
 }
