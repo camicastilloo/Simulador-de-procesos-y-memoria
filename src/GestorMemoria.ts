@@ -51,10 +51,42 @@ export class GestorMemoria implements IGestorMemoria {
 }
 
   liberarMemoria(proceso: IProceso): void {
-    // Falta liberación de memoria
+  const indice = this.bloques.findIndex(
+    bloque => bloque.obtenerProceso() === proceso
+  );
+
+  if (indice === -1) {
+    return;
   }
+
+  this.bloques[indice]?.liberar();
+
+  this.coalescer();
+}
 
   obtenerBloques(): IBloqueMemoria[] {
     return [...this.bloques];
   }
+  private coalescer(): void {
+  for (let i = this.bloques.length - 1; i > 0; i--) {
+    const actual = this.bloques[i];
+    const anterior = this.bloques[i - 1];
+
+    if (actual?.estaLibre() && anterior?.estaLibre()) {
+      const nuevoTamanio =
+        anterior.obtenerTamanio() + actual.obtenerTamanio();
+
+      this.bloques.splice(i - 1, 2);
+
+      this.bloques.splice(
+        i - 1,
+        0,
+        new BloqueMemoria(
+          anterior.obtenerInicio(),
+          nuevoTamanio
+        )
+      );
+    }
+  }
+}
 }
