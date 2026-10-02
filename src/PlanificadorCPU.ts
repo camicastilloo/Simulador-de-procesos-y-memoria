@@ -61,6 +61,15 @@ finalizoProceso(): boolean {
   return this.procesoActual.obtenerCPURestante() === 0;
 }
 
+finalizarProceso(): void {
+  if (this.procesoActual === null) {
+    return;
+  }
+
+  this.procesoActual.cambiarEstado(EstadoProceso.TERMINADO);
+  this.procesoActual = null;
+}
+
 quantumVencido(): boolean {
   if (this.procesoActual === null) {
     return false;

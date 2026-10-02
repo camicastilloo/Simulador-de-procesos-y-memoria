@@ -105,4 +105,20 @@ test("renueva el quantum cuando no hay otro proceso listo", () => {
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
   expect(proceso.obtenerQuantumConsumido()).toBe(0);
 });
+
+test("finaliza el proceso y libera el CPU", () => {
+  const planificador = new PlanificadorCPU();
+  const proceso = new Proceso(1, 100, 1);
+
+  planificador.agregarProceso(proceso);
+  planificador.despachar();
+  planificador.ejecutarUnidad();
+
+  expect(planificador.finalizoProceso()).toBe(true);
+
+  planificador.finalizarProceso();
+
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.TERMINADO);
+  expect(planificador.obtenerProcesoActual()).toBe(null);
+});
 });
