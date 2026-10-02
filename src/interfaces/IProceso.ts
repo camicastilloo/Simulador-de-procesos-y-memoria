@@ -17,4 +17,5 @@ export interface IProceso {
   disminuirBloqueo(): void;
   configurarBloqueoCPU(ticksCPU: number, duracion: number): void;
   debeBloquearse(): boolean;
+  obtenerDuracionBloqueo(): number;
 }

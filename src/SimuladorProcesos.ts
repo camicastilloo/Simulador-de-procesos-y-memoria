@@ -94,14 +94,21 @@ tick(): void {
   this.planificadorCPU.despachar();
   this.planificadorCPU.ejecutarUnidad();
 
-   // Fase 3: finalizar si terminó su CPU
-  const procesoActual = this.planificadorCPU.obtenerProcesoActual();
+  // Fase 3: finalizar, bloquear o controlar quantum
+const procesoActual = this.planificadorCPU.obtenerProcesoActual();
 
-  if (this.planificadorCPU.finalizoProceso() && procesoActual !== null) {
-    this.planificadorCPU.finalizarProceso();
-    this.gestorMemoria.liberarMemoria(procesoActual);
-  }
-  else if (this.planificadorCPU.quantumVencido()) {
+if (this.planificadorCPU.finalizoProceso() && procesoActual !== null) {
+  this.planificadorCPU.finalizarProceso();
+  this.gestorMemoria.liberarMemoria(procesoActual);
+} else if (
+  procesoActual !== null &&
+  procesoActual.debeBloquearse()
+) {
+  this.planificadorCPU.bloquearProceso(
+    procesoActual.obtenerDuracionBloqueo()
+  );
+} else if (this.planificadorCPU.quantumVencido()) {
+  
   if (this.planificadorCPU.obtenerColaListos().length > 0) {
     this.planificadorCPU.reencolarPorQuantum();
   } else {

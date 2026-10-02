@@ -70,6 +70,15 @@ finalizarProceso(): void {
   this.procesoActual = null;
 }
 
+bloquearProceso(duracion: number): void {
+  if (this.procesoActual === null) {
+    return;
+  }
+
+  this.procesoActual.iniciarBloqueo(duracion);
+  this.procesoActual = null;
+}
+
 quantumVencido(): boolean {
   if (this.procesoActual === null) {
     return false;

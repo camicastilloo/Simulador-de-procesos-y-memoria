@@ -93,4 +93,8 @@ debeBloquearse(): boolean {
     this.quantumConsumido >= this.ticksParaBloqueo
   );
 }
+
+obtenerDuracionBloqueo(): number {
+  return this.duracionBloqueo;
+}
 }
