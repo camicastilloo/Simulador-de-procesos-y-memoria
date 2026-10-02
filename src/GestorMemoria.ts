@@ -19,17 +19,36 @@ export class GestorMemoria implements IGestorMemoria {
   }
 
   asignarMemoria(proceso: IProceso): boolean {
-    const bloque = this.estrategia.buscarBloque(
-      this.bloques,
-      proceso.obtenerMemoriaRequerida()
+  const tamanio = proceso.obtenerMemoriaRequerida();
+
+  const bloque = this.estrategia.buscarBloque(
+    this.bloques,
+    tamanio
+  );
+
+  if (bloque === null) {
+    return false;
+  }
+
+  const indice = this.bloques.findIndex(
+  actual => actual === bloque
+);
+  const inicio = bloque.obtenerInicio();
+  const tamanioBloque = bloque.obtenerTamanio();
+
+  bloque.asignarProceso(proceso);
+
+  if (tamanioBloque > tamanio) {
+    const bloqueLibre = new BloqueMemoria(
+      inicio + tamanio,
+      tamanioBloque - tamanio
     );
 
-    if (bloque === null) {
-      return false;
-    }
-
-    return true;
+    this.bloques.splice(indice + 1, 0, bloqueLibre);
   }
+
+  return true;
+}
 
   liberarMemoria(proceso: IProceso): void {
     // Falta liberación de memoria

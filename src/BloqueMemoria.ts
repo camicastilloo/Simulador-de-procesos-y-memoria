@@ -31,4 +31,7 @@ export class BloqueMemoria implements IBloqueMemoria {
   estaLibre(): boolean {
     return this.proceso === null;
   }
+  asignarProceso(proceso: IProceso): void {
+    this.proceso = proceso;
+}
 }
