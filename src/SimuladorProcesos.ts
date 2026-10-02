@@ -76,6 +76,7 @@ tick(): void {
     throw new Error("El simulador no está configurado");
   }
 
+  // Fase 1: admitir procesos esperando memoria
   for (const proceso of this.procesos) {
     if (proceso.obtenerEstado() !== EstadoProceso.ESPERANDO_MEMORIA) {
       continue;
@@ -88,6 +89,10 @@ tick(): void {
       this.planificadorCPU.agregarProceso(proceso);
     }
   }
+
+  // Fase 2: despachar y ejecutar una unidad de CPU
+  this.planificadorCPU.despachar();
+  this.planificadorCPU.ejecutarUnidad();
 
   this.tickActual++;
 }

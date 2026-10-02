@@ -78,4 +78,29 @@ test("incrementa el tick al ejecutar un tick", () => {
 
   expect(simulador.obtenerTick()).toBe(1);
 });
+
+test("despacha un proceso listo durante el tick", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 5);
+
+  simulador.configurar(1000, 3);
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+
+  expect(simulador.obtenerProcesoCPU()).toBe(proceso);
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+});
+
+test("ejecuta una unidad de CPU durante el tick", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 5);
+
+  simulador.configurar(1000, 3);
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+
+  expect(proceso.obtenerCPURestante()).toBe(4);
+});
 });
