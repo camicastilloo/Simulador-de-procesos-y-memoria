@@ -94,6 +94,14 @@ tick(): void {
   this.planificadorCPU.despachar();
   this.planificadorCPU.ejecutarUnidad();
 
+   // Fase 3: finalizar si terminó su CPU
+  const procesoActual = this.planificadorCPU.obtenerProcesoActual();
+
+  if (this.planificadorCPU.finalizoProceso() && procesoActual !== null) {
+    this.planificadorCPU.finalizarProceso();
+    this.gestorMemoria.liberarMemoria(procesoActual);
+  }
+
   this.tickActual++;
 }
 
@@ -102,17 +110,18 @@ tick(): void {
   }
 
   obtenerMemoria(): number {
-    if (this.gestorMemoria === null) {
-      return 0;
-    }
-
-    return this.gestorMemoria
-      .obtenerBloques()
-      .reduce(
-        (total, bloque) => total + bloque.obtenerTamanio(),
-        0
-      );
+  if (this.gestorMemoria === null) {
+    return 0;
   }
+
+  return this.gestorMemoria
+    .obtenerBloques()
+    .filter(bloque => bloque.estaLibre())
+    .reduce(
+      (total, bloque) => total + bloque.obtenerTamanio(),
+      0
+    );
+}
 
   obtenerProcesoCPU(): unknown | null {
     if (this.planificadorCPU === null) {

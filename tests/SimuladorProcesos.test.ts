@@ -103,4 +103,50 @@ test("ejecuta una unidad de CPU durante el tick", () => {
 
   expect(proceso.obtenerCPURestante()).toBe(4);
 });
+
+test("finaliza un proceso cuando consume toda su CPU", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 1);
+
+  simulador.configurar(1000, 3);
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.TERMINADO);
+  expect(simulador.obtenerProcesoCPU()).toBe(null);
+});
+
+test("libera la memoria cuando un proceso termina", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 1);
+
+  simulador.configurar(1000, 3);
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+
+  expect(simulador.obtenerMemoria()).toBe(1000);
+});
+
+test("admite un proceso esperando después de liberar memoria", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso1 = new Proceso(1, 800, 1);
+  const proceso2 = new Proceso(2, 300, 5);
+
+  simulador.configurar(1000, 3);
+  simulador.registrarProceso(proceso1);
+  simulador.registrarProceso(proceso2);
+
+  expect(proceso2.obtenerEstado()).toBe(EstadoProceso.ESPERANDO_MEMORIA);
+
+  simulador.tick();
+
+  expect(proceso1.obtenerEstado()).toBe(EstadoProceso.TERMINADO);
+  expect(proceso2.obtenerEstado()).toBe(EstadoProceso.ESPERANDO_MEMORIA);
+
+  simulador.tick();
+
+  expect(proceso2.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+});
 });

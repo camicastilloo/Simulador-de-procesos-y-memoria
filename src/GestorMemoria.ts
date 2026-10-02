@@ -34,18 +34,29 @@ export class GestorMemoria implements IGestorMemoria {
   actual => actual === bloque
 );
   const inicio = bloque.obtenerInicio();
-  const tamanioBloque = bloque.obtenerTamanio();
+const tamanioBloque = bloque.obtenerTamanio();
 
+if (tamanioBloque > tamanio) {
+  const bloqueAsignado = new BloqueMemoria(
+    inicio,
+    tamanio,
+    proceso
+  );
+
+  const bloqueLibre = new BloqueMemoria(
+    inicio + tamanio,
+    tamanioBloque - tamanio
+  );
+
+  this.bloques.splice(
+    indice,
+    1,
+    bloqueAsignado,
+    bloqueLibre
+  );
+} else {
   bloque.asignarProceso(proceso);
-
-  if (tamanioBloque > tamanio) {
-    const bloqueLibre = new BloqueMemoria(
-      inicio + tamanio,
-      tamanioBloque - tamanio
-    );
-
-    this.bloques.splice(indice + 1, 0, bloqueLibre);
-  }
+}
 
   return true;
 }
