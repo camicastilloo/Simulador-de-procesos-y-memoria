@@ -13,4 +13,5 @@ export interface IPlanificadorCPU {
   quantumVencido(): boolean;
   reencolarPorQuantum(): void;
   renovarQuantum(): void;
+  obtenerCambiosContexto(): number;
 }

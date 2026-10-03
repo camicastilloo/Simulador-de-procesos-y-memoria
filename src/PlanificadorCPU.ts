@@ -6,11 +6,13 @@ export class PlanificadorCPU implements IPlanificadorCPU {
   private readonly colaListos: IProceso[];
   private procesoActual: IProceso | null;
   private quantum: number;
+  private cambiosContexto: number;
 
   constructor() {
     this.colaListos = [];
     this.procesoActual = null;
     this.quantum = 0;
+    this.cambiosContexto = 0;
   }
 
   agregarProceso(proceso: IProceso): void {
@@ -108,5 +110,9 @@ renovarQuantum(): void {
   }
 
   this.procesoActual.reiniciarQuantum();
+}
+
+obtenerCambiosContexto(): number {
+  return this.cambiosContexto;
 }
 }

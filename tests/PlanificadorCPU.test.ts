@@ -121,4 +121,10 @@ test("finaliza el proceso y libera el CPU", () => {
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.TERMINADO);
   expect(planificador.obtenerProcesoActual()).toBe(null);
 });
+
+test("inicia el contador de cambios de contexto en cero", () => {
+  const planificador = new PlanificadorCPU();
+
+  expect(planificador.obtenerCambiosContexto()).toBe(0);
+});
 });
