@@ -1,5 +1,6 @@
 import type { ISimuladorProcesos } from "./interfaces/ISimuladorProcesos.js";
 import type { IProceso } from "./interfaces/IProceso.js";
+import type { IProcesoVista } from "./interfaces/IProcesoVista.js";
 import { GestorMemoria } from "./GestorMemoria.js";
 import { FirstFit } from "./FirstFit.js";
 import { PlanificadorCPU } from "./PlanificadorCPU.js";
@@ -10,7 +11,6 @@ export class SimuladorProcesos implements ISimuladorProcesos {
   private gestorMemoria: GestorMemoria | null;
   private planificadorCPU: PlanificadorCPU | null;
   private readonly procesos: IProceso[];
-  private unidadesCPUUtilizadas: number;
   private unidadesCPUUtilizadas: number;
 
   constructor() {
@@ -233,5 +233,55 @@ obtenerCambiosContexto(): number {
   }
 
   return this.planificadorCPU.obtenerCambiosContexto();
+}
+
+obtenerProcesosListos(): readonly IProcesoVista[] {
+  if (this.planificadorCPU === null) {
+    return [];
+  }
+
+  return this.planificadorCPU
+    .obtenerColaListos()
+    .map(proceso => ({
+      pid: proceso.obtenerPid(),
+      memoriaRequerida: proceso.obtenerMemoriaRequerida(),
+      cpuRestante: proceso.obtenerCPURestante(),
+      estado: proceso.obtenerEstado(),
+      quantumConsumido: proceso.obtenerQuantumConsumido(),
+      bloqueoRestante: proceso.obtenerBloqueoRestante()
+    }));
+}
+
+obtenerProcesosEsperandoMemoria(): readonly IProcesoVista[] {
+  return this.obtenerProcesosPorEstado(
+    EstadoProceso.ESPERANDO_MEMORIA
+  );
+}
+
+obtenerProcesosBloqueados(): readonly IProcesoVista[] {
+  return this.obtenerProcesosPorEstado(
+    EstadoProceso.BLOQUEADO
+  );
+}
+
+obtenerProcesosTerminados(): readonly IProcesoVista[] {
+  return this.obtenerProcesosPorEstado(
+    EstadoProceso.TERMINADO
+  );
+}
+
+private obtenerProcesosPorEstado(
+  estado: EstadoProceso
+): readonly IProcesoVista[] {
+  return this.procesos
+    .filter(proceso => proceso.obtenerEstado() === estado)
+    .map(proceso => ({
+      pid: proceso.obtenerPid(),
+      memoriaRequerida: proceso.obtenerMemoriaRequerida(),
+      cpuRestante: proceso.obtenerCPURestante(),
+      estado: proceso.obtenerEstado(),
+      quantumConsumido: proceso.obtenerQuantumConsumido(),
+      bloqueoRestante: proceso.obtenerBloqueoRestante()
+    }));
 }
 }
