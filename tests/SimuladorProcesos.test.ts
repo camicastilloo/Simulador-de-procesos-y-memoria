@@ -207,4 +207,22 @@ test("rechaza tiempo de CPU no entero", () => {
 
   expect(() => simulador.registrarProceso(proceso)).toThrow();
 });
+
+test("reinicia el estado al reconfigurar el simulador", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 3);
+
+  simulador.configurar(1000, 2);
+  simulador.registrarProceso(proceso);
+  simulador.tick();
+
+  simulador.configurar(2000, 4);
+
+  expect(simulador.obtenerTick()).toBe(0);
+  expect(simulador.obtenerProcesoCPU()).toBeNull();
+  expect(simulador.obtenerProcesosListos()).toHaveLength(0);
+  expect(simulador.obtenerProcesosTerminados()).toHaveLength(0);
+  expect(simulador.obtenerOcupacionMemoria()).toBe(0);
+  expect(simulador.obtenerUtilizacionCPU()).toBe(0);
+});
 });

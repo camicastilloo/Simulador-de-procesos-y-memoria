@@ -36,6 +36,8 @@ export class SimuladorProcesos implements ISimuladorProcesos {
 
     this.tamanioMemoria = tamanioMemoria;
     this.tickActual = 0;
+    this.procesos.length = 0;
+    this.unidadesCPUUtilizadas = 0;
     this.gestorMemoria = new GestorMemoria(
       tamanioMemoria,
       new FirstFit()
