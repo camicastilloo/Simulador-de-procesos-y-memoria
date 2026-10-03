@@ -80,4 +80,23 @@ test("detecta cuando un proceso debe bloquearse", () => {
   planificador.ejecutarUnidad();
   expect(proceso.debeBloquearse()).toBe(true);
 });
+
+test("bloquea por CPU aunque el quantum haya vencido antes", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 5);
+
+  simulador.configurar(1000, 2);
+  proceso.configurarBloqueoCPU(3, 2);
+
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+  simulador.tick();
+
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+
+  simulador.tick();
+
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.BLOQUEADO);
+});
 });
