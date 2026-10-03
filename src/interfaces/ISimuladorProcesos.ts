@@ -7,7 +7,7 @@ export interface ISimuladorProcesos {
   registrarProceso(proceso: IProceso): void;
   obtenerTick(): number;
   obtenerMemoria(): number;
-  obtenerProcesoCPU(): unknown | null;
+  obtenerProcesoCPU(): IProcesoVista | null;
   tick(): void;
 
   obtenerOcupacionMemoria(): number;

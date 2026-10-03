@@ -176,13 +176,21 @@ if (this.planificadorCPU.finalizoProceso() && procesoActual !== null) {
     );
 }
 
-  obtenerProcesoCPU(): unknown | null {
-    if (this.planificadorCPU === null) {
-      return null;
-    }
+  obtenerProcesoCPU(): IProcesoVista | null {
+  if (this.planificadorCPU === null) return null;
 
-    return this.planificadorCPU.obtenerProcesoActual();
-  }
+  const proceso = this.planificadorCPU.obtenerProcesoActual();
+  if (proceso === null) return null;
+
+  return {
+    pid: proceso.obtenerPid(),
+    memoriaRequerida: proceso.obtenerMemoriaRequerida(),
+    cpuRestante: proceso.obtenerCPURestante(),
+    estado: proceso.obtenerEstado(),
+    quantumConsumido: proceso.obtenerQuantumConsumido(),
+    bloqueoRestante: proceso.obtenerBloqueoRestante()
+  };
+}
 
   obtenerOcupacionMemoria(): number {
   if (this.gestorMemoria === null) {

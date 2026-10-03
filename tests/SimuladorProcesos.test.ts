@@ -92,7 +92,7 @@ test("despacha un proceso listo durante el tick", () => {
 
   simulador.tick();
 
-  expect(simulador.obtenerProcesoCPU()).toBe(proceso);
+  expect(simulador.obtenerProcesoCPU()?.pid).toBe(proceso.obtenerPid());
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
 });
 
@@ -171,7 +171,7 @@ test("reencola el proceso cuando vence el quantum", () => {
 
   simulador.tick();
 
-  expect(simulador.obtenerProcesoCPU()).toBe(proceso2);
+  expect(simulador.obtenerProcesoCPU()?.pid).toBe(proceso2.obtenerPid());
   expect(proceso2.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
 });
 
@@ -185,7 +185,7 @@ test("renueva el quantum si no hay otro proceso listo", () => {
   simulador.tick();
   simulador.tick();
 
-  expect(simulador.obtenerProcesoCPU()).toBe(proceso);
+  expect(simulador.obtenerProcesoCPU()?.pid).toBe(proceso.obtenerPid());
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
   expect(proceso.obtenerQuantumConsumido()).toBe(0);
 });
