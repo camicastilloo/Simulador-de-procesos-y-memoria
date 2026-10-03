@@ -185,4 +185,47 @@ test("renueva el quantum si no hay otro proceso listo", () => {
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
   expect(proceso.obtenerQuantumConsumido()).toBe(0);
 });
+
+test("bloquea un proceso durante el tick", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 100, 5);
+
+  simulador.configurar(1000, 3);
+  proceso.configurarBloqueoCPU(2, 2);
+
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+
+  simulador.tick();
+
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.BLOQUEADO);
+  expect(simulador.obtenerProcesoCPU()).toBeNull();
+});
+
+test("desbloquea un proceso cuando termina su bloqueo", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 100, 5);
+
+  simulador.configurar(1000, 3);
+  proceso.configurarBloqueoCPU(2, 2);
+
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+  simulador.tick();
+
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.BLOQUEADO);
+  expect(proceso.obtenerBloqueoRestante()).toBe(2);
+
+  simulador.tick();
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.BLOQUEADO);
+  expect(proceso.obtenerBloqueoRestante()).toBe(1);
+
+  simulador.tick();
+
+  expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
+  expect(proceso.obtenerBloqueoRestante()).toBe(0);
+});
 });

@@ -90,11 +90,25 @@ tick(): void {
     }
   }
 
-  // Fase 2: despachar y ejecutar una unidad de CPU
+      // Fase 2: actualizar procesos bloqueados
+    for (const proceso of this.procesos) {
+      if (proceso.obtenerEstado() !== EstadoProceso.BLOQUEADO) {
+        continue;
+      }
+
+      proceso.disminuirBloqueo();
+
+      if (proceso.obtenerBloqueoRestante() === 0) {
+        proceso.cambiarEstado(EstadoProceso.LISTO);
+        this.planificadorCPU.agregarProceso(proceso);
+      }
+    }
+
+  // Fase 3: despachar y ejecutar una unidad de CPU
   this.planificadorCPU.despachar();
   this.planificadorCPU.ejecutarUnidad();
 
-  // Fase 3: finalizar, bloquear o controlar quantum
+  // Fase 4: finalizar, bloquear o controlar quantum
 const procesoActual = this.planificadorCPU.obtenerProcesoActual();
 
 if (this.planificadorCPU.finalizoProceso() && procesoActual !== null) {
@@ -108,7 +122,7 @@ if (this.planificadorCPU.finalizoProceso() && procesoActual !== null) {
     procesoActual.obtenerDuracionBloqueo()
   );
 } else if (this.planificadorCPU.quantumVencido()) {
-  
+
   if (this.planificadorCPU.obtenerColaListos().length > 0) {
     this.planificadorCPU.reencolarPorQuantum();
   } else {
