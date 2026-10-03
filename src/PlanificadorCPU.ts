@@ -101,6 +101,7 @@ reencolarPorQuantum(): void {
   this.procesoActual.reiniciarQuantum();
 
   this.colaListos.push(this.procesoActual);
+  this.cambiosContexto++;
   this.procesoActual = null;
 }
 
