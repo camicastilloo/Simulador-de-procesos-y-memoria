@@ -1,6 +1,7 @@
 import type { ISimuladorProcesos } from "./interfaces/ISimuladorProcesos.js";
 import type { IProceso } from "./interfaces/IProceso.js";
 import type { IProcesoVista } from "./interfaces/IProcesoVista.js";
+import type { IBloqueMemoriaVista } from "./interfaces/IBloqueMemoriaVista.js";
 import { GestorMemoria } from "./GestorMemoria.js";
 import { FirstFit } from "./FirstFit.js";
 import { PlanificadorCPU } from "./PlanificadorCPU.js";
@@ -268,6 +269,18 @@ obtenerProcesosTerminados(): readonly IProcesoVista[] {
   return this.obtenerProcesosPorEstado(
     EstadoProceso.TERMINADO
   );
+}
+
+obtenerBloquesMemoria(): readonly IBloqueMemoriaVista[] {
+  if (this.gestorMemoria === null) {
+    return [];
+  }
+
+  return this.gestorMemoria.obtenerBloques().map(bloque => ({
+    inicio: bloque.obtenerInicio(),
+    tamanio: bloque.obtenerTamanio(),
+    pid: bloque.obtenerProceso()?.obtenerPid() ?? null
+  }));
 }
 
 private obtenerProcesosPorEstado(

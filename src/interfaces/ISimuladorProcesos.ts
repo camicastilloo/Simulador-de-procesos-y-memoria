@@ -1,5 +1,6 @@
 import type { IProceso } from "./IProceso.js";
 import type { IProcesoVista } from "./IProcesoVista.js";
+import type { IBloqueMemoriaVista } from "./IBloqueMemoriaVista.js";
 
 export interface ISimuladorProcesos {
   configurar(tamanioMemoria: number, quantum: number): void;
@@ -18,4 +19,5 @@ export interface ISimuladorProcesos {
   obtenerProcesosEsperandoMemoria(): readonly IProcesoVista[];
   obtenerProcesosBloqueados(): readonly IProcesoVista[];
   obtenerProcesosTerminados(): readonly IProcesoVista[];
+  obtenerBloquesMemoria(): readonly IBloqueMemoriaVista[];
 }
