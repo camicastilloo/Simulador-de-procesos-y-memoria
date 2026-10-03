@@ -158,4 +158,58 @@ if (this.planificadorCPU.finalizoProceso() && procesoActual !== null) {
 
     return this.planificadorCPU.obtenerProcesoActual();
   }
+
+  obtenerOcupacionMemoria(): number {
+  if (this.gestorMemoria === null) {
+    return 0;
+  }
+
+  const memoriaLibre = this.obtenerMemoria();
+
+  // La memoria total se obtiene sumando todos los bloques.
+  const memoriaTotal = this.gestorMemoria
+    .obtenerBloques()
+    .reduce(
+      (total, bloque) => total + bloque.obtenerTamanio(),
+      0
+    );
+
+  if (memoriaTotal === 0) {
+    return 0;
+  }
+
+  return ((memoriaTotal - memoriaLibre) / memoriaTotal) * 100;
+}
+
+obtenerMayorBloqueLibre(): number {
+  if (this.gestorMemoria === null) {
+    return 0;
+  }
+
+  const bloquesLibres = this.gestorMemoria
+    .obtenerBloques()
+    .filter(bloque => bloque.estaLibre());
+
+  if (bloquesLibres.length === 0) {
+    return 0;
+  }
+
+  return Math.max(
+    ...bloquesLibres.map(bloque => bloque.obtenerTamanio())
+  );
+}
+
+obtenerFragmentacionExterna(): number {
+  const memoriaLibre = this.obtenerMemoria();
+
+  if (memoriaLibre === 0) {
+    return 0;
+  }
+
+  const mayorBloqueLibre = this.obtenerMayorBloqueLibre();
+
+  return (
+    (1 - mayorBloqueLibre / memoriaLibre) * 100
+  );
+}
 }

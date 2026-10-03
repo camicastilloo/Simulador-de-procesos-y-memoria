@@ -14,4 +14,7 @@ export interface ISimuladorProcesos {
   obtenerMemoria(): number;
   obtenerProcesoCPU(): unknown | null;
   tick(): void;
+  obtenerOcupacionMemoria(): number;
+  obtenerMayorBloqueLibre(): number;
+  obtenerFragmentacionExterna(): number;
 }
