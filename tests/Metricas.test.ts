@@ -52,3 +52,19 @@ test("calcula la utilización del CPU", () => {
 
   expect(simulador.obtenerUtilizacionCPU()).toBe(100);
 });
+
+test("obtiene la cantidad de cambios de contexto", () => {
+  const simulador = new SimuladorProcesos();
+
+  const proceso1 = new Proceso(1, 100, 5);
+  const proceso2 = new Proceso(2, 100, 5);
+
+  simulador.configurar(1000, 1);
+
+  simulador.registrarProceso(proceso1);
+  simulador.registrarProceso(proceso2);
+
+  simulador.tick();
+
+  expect(simulador.obtenerCambiosContexto()).toBe(1);
+});

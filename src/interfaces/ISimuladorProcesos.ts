@@ -18,4 +18,5 @@ export interface ISimuladorProcesos {
   obtenerMayorBloqueLibre(): number;
   obtenerFragmentacionExterna(): number;
   obtenerUtilizacionCPU(): number;
+  obtenerCambiosContexto(): number;
 }

@@ -11,6 +11,7 @@ export class SimuladorProcesos implements ISimuladorProcesos {
   private planificadorCPU: PlanificadorCPU | null;
   private readonly procesos: IProceso[];
   private unidadesCPUUtilizadas: number;
+  private unidadesCPUUtilizadas: number;
 
   constructor() {
     this.tickActual = 0;
@@ -224,5 +225,13 @@ obtenerUtilizacionCPU(): number {
   }
 
   return (this.unidadesCPUUtilizadas / this.tickActual) * 100;
+}
+
+obtenerCambiosContexto(): number {
+  if (this.planificadorCPU === null) {
+    return 0;
+  }
+
+  return this.planificadorCPU.obtenerCambiosContexto();
 }
 }
