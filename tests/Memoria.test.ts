@@ -26,4 +26,24 @@ describe("GestorMemoria", () => {
     expect(bloques[0]?.obtenerTamanio()).toBe(1000);
     expect(bloques[0]?.estaLibre()).toBe(true);
   });
+
+  test("asigna memoria y divide el bloque libre", () => {
+  const gestor = new GestorMemoria(1000, new FirstFit());
+  const proceso = new Proceso(1, 300, 5);
+
+  const asignado = gestor.asignarMemoria(proceso);
+
+  expect(asignado).toBe(true);
+
+  const bloques = gestor.obtenerBloques();
+
+  expect(bloques).toHaveLength(2);
+  expect(bloques[0]?.obtenerInicio()).toBe(0);
+  expect(bloques[0]?.obtenerTamanio()).toBe(300);
+  expect(bloques[0]?.obtenerProceso()).toBe(proceso);
+
+  expect(bloques[1]?.obtenerInicio()).toBe(300);
+  expect(bloques[1]?.obtenerTamanio()).toBe(700);
+  expect(bloques[1]?.estaLibre()).toBe(true);
+});
 });
