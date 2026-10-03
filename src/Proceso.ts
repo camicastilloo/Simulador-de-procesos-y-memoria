@@ -6,7 +6,8 @@ export class Proceso implements IProceso {
   private readonly memoriaRequerida: number;
   private readonly tiempoTotalCPU: number;
 
-  private cpuRestante: number;
+  private cpuRestante: number; 
+  private cpuConsumida: number;
   private estado: EstadoProceso;
   private quantumConsumido: number;
   private bloqueoRestante: number;
@@ -22,6 +23,7 @@ export class Proceso implements IProceso {
     this.memoriaRequerida = memoriaRequerida;
     this.tiempoTotalCPU = tiempoTotalCPU;
     this.cpuRestante = tiempoTotalCPU;
+    this.cpuConsumida = 0;
     this.estado = EstadoProceso.NUEVO;
     this.quantumConsumido = 0;
     this.bloqueoRestante = 0;
@@ -62,6 +64,7 @@ export class Proceso implements IProceso {
 
   consumirCPU(): void {
     this.cpuRestante--;
+    this.cpuConsumida++;
   }
 
   reiniciarQuantum(): void {
@@ -74,6 +77,7 @@ export class Proceso implements IProceso {
 
   iniciarBloqueo(duracion: number): void {
     this.bloqueoRestante = duracion;
+    this.ticksParaBloqueo = 0;
     this.estado = EstadoProceso.BLOQUEADO;
   }
 
@@ -90,7 +94,7 @@ export class Proceso implements IProceso {
 debeBloquearse(): boolean {
   return (
     this.ticksParaBloqueo > 0 &&
-    this.quantumConsumido >= this.ticksParaBloqueo
+    this.cpuConsumida >= this.ticksParaBloqueo
   );
 }
 
