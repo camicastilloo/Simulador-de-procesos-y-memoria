@@ -102,3 +102,25 @@ test("la inspección de memoria devuelve una copia independiente", () => {
   expect(bloquesNuevos[0]?.pid).toBe(1);
   expect(bloquesNuevos[0]).not.toBe(bloque);
 });
+
+test("la inspección de procesos devuelve una copia independiente", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 3);
+
+  simulador.configurar(1000, 2);
+  simulador.registrarProceso(proceso);
+
+  const procesos = simulador.obtenerProcesosListos();
+  const vista = procesos[0];
+
+  if (vista === undefined) {
+    throw new Error("No se encontró el proceso");
+  }
+
+  expect(vista.pid).toBe(1);
+
+  const procesosNuevos = simulador.obtenerProcesosListos();
+
+  expect(procesosNuevos[0]?.pid).toBe(1);
+  expect(procesosNuevos[0]).not.toBe(vista);
+});
