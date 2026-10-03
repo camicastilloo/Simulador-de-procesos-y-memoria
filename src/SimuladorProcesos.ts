@@ -46,13 +46,19 @@ export class SimuladorProcesos implements ISimuladorProcesos {
   }
 
   registrarProceso(proceso: IProceso): void {
-  if (proceso.obtenerMemoriaRequerida() <= 0) {
-    throw new Error("La memoria requerida debe ser positiva");
-  }
+  if (
+  !Number.isInteger(proceso.obtenerMemoriaRequerida()) ||
+  proceso.obtenerMemoriaRequerida() <= 0
+) {
+  throw new Error("La memoria requerida debe ser un entero positivo");
+}
 
-  if (proceso.obtenerTiempoTotalCPU() <= 0) {
-    throw new Error("El tiempo de CPU debe ser positivo");
-  }
+if (
+  !Number.isInteger(proceso.obtenerTiempoTotalCPU()) ||
+  proceso.obtenerTiempoTotalCPU() <= 0
+) {
+  throw new Error("El tiempo de CPU debe ser un entero positivo");
+}
 
   if (
     this.procesos.some(

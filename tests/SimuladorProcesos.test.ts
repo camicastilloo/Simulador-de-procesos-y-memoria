@@ -189,4 +189,22 @@ test("renueva el quantum si no hay otro proceso listo", () => {
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.EJECUTANDO);
   expect(proceso.obtenerQuantumConsumido()).toBe(0);
 });
+
+test("rechaza memoria no entera", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 500.5, 5);
+
+  simulador.configurar(1000, 3);
+
+  expect(() => simulador.registrarProceso(proceso)).toThrow();
+});
+
+test("rechaza tiempo de CPU no entero", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 500, 5.5);
+
+  simulador.configurar(1000, 3);
+
+  expect(() => simulador.registrarProceso(proceso)).toThrow();
+});
 });
