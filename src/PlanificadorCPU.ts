@@ -78,6 +78,7 @@ bloquearProceso(duracion: number): void {
   }
 
   this.procesoActual.iniciarBloqueo(duracion);
+  this.cambiosContexto++;
   this.procesoActual = null;
 }
 

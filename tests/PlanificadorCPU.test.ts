@@ -146,4 +146,22 @@ test("cuenta un cambio de contexto al vencer el quantum", () => {
 
   expect(planificador.obtenerCambiosContexto()).toBe(1);
 });
+
+test("cuenta un cambio de contexto al bloquear un proceso", () => {
+  const planificador = new PlanificadorCPU();
+  const proceso = new Proceso(1, 100, 5);
+
+  planificador.configurarQuantum(3);
+  proceso.configurarBloqueoCPU(1, 2);
+
+  planificador.agregarProceso(proceso);
+  planificador.despachar();
+  planificador.ejecutarUnidad();
+
+  planificador.bloquearProceso(
+    proceso.obtenerDuracionBloqueo()
+  );
+
+  expect(planificador.obtenerCambiosContexto()).toBe(1);
+});
 });
