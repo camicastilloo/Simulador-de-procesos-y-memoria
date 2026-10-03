@@ -13,6 +13,7 @@ export class SimuladorProcesos implements ISimuladorProcesos {
   private planificadorCPU: PlanificadorCPU | null;
   private readonly procesos: IProceso[];
   private unidadesCPUUtilizadas: number;
+  private tamanioMemoria: number;
 
   constructor() {
     this.tickActual = 0;
@@ -20,13 +21,20 @@ export class SimuladorProcesos implements ISimuladorProcesos {
     this.planificadorCPU = null;
     this.procesos = [];
     this.unidadesCPUUtilizadas = 0;
+    this.tamanioMemoria = 0;
   }
 
   configurar(tamanioMemoria: number, quantum: number): void {
-    if (tamanioMemoria <= 0 || quantum <= 0) {
-      throw new Error("La memoria y el quantum deben ser positivos");
-    }
+    if (
+  !Number.isInteger(tamanioMemoria) ||
+  tamanioMemoria <= 0 ||
+  !Number.isInteger(quantum) ||
+  quantum <= 0
+) {
+  throw new Error("La memoria y el quantum deben ser enteros positivos");
+}
 
+    this.tamanioMemoria = tamanioMemoria;
     this.tickActual = 0;
     this.gestorMemoria = new GestorMemoria(
       tamanioMemoria,
@@ -57,6 +65,10 @@ export class SimuladorProcesos implements ISimuladorProcesos {
   if (this.gestorMemoria === null) {
     throw new Error("El simulador no está configurado");
   }
+
+  if (proceso.obtenerMemoriaRequerida() > this.tamanioMemoria) {
+  throw new Error("El proceso requiere más memoria que la disponible");
+}
 
   const asignado = this.gestorMemoria.asignarMemoria(proceso);
 

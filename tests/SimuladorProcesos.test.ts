@@ -51,12 +51,16 @@ test("registra un proceso y lo deja listo si hay memoria", () => {
 
 test("deja esperando un proceso si no hay memoria suficiente", () => {
   const simulador = new SimuladorProcesos();
-  const proceso = new Proceso(1, 1200, 5);
+
+  const proceso1 = new Proceso(1, 700, 5);
+  const proceso2 = new Proceso(2, 500, 5);
 
   simulador.configurar(1000, 3);
-  simulador.registrarProceso(proceso);
 
-  expect(proceso.obtenerEstado()).toBe(EstadoProceso.ESPERANDO_MEMORIA);
+  simulador.registrarProceso(proceso1);
+  simulador.registrarProceso(proceso2);
+
+  expect(proceso2.obtenerEstado()).toBe(EstadoProceso.ESPERANDO_MEMORIA);
 });
 
 test("rechaza un PID repetido", () => {
