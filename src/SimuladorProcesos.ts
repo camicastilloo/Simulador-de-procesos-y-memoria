@@ -10,12 +10,14 @@ export class SimuladorProcesos implements ISimuladorProcesos {
   private gestorMemoria: GestorMemoria | null;
   private planificadorCPU: PlanificadorCPU | null;
   private readonly procesos: IProceso[];
+  private unidadesCPUUtilizadas: number;
 
   constructor() {
     this.tickActual = 0;
     this.gestorMemoria = null;
     this.planificadorCPU = null;
     this.procesos = [];
+    this.unidadesCPUUtilizadas = 0;
   }
 
   configurar(tamanioMemoria: number, quantum: number): void {
@@ -107,6 +109,9 @@ tick(): void {
   // Fase 3: despachar y ejecutar una unidad de CPU
   this.planificadorCPU.despachar();
   this.planificadorCPU.ejecutarUnidad();
+  if (this.planificadorCPU.obtenerProcesoActual() !== null) {
+  this.unidadesCPUUtilizadas++; 
+}
 
   // Fase 4: finalizar, bloquear o controlar quantum
 const procesoActual = this.planificadorCPU.obtenerProcesoActual();
@@ -211,5 +216,13 @@ obtenerFragmentacionExterna(): number {
   return (
     (1 - mayorBloqueLibre / memoriaLibre) * 100
   );
+}
+
+obtenerUtilizacionCPU(): number {
+  if (this.tickActual === 0) {
+    return 0;
+  }
+
+  return (this.unidadesCPUUtilizadas / this.tickActual) * 100;
 }
 }

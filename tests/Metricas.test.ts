@@ -39,3 +39,16 @@ test("calcula la fragmentación externa", () => {
 
   expect(simulador.obtenerFragmentacionExterna()).toBe(25);
 });
+
+test("calcula la utilización del CPU", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 100, 5);
+
+  simulador.configurar(1000, 3);
+  simulador.registrarProceso(proceso);
+
+  simulador.tick();
+  simulador.tick();
+
+  expect(simulador.obtenerUtilizacionCPU()).toBe(100);
+});
