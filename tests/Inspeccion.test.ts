@@ -80,3 +80,25 @@ test("la consulta de memoria devuelve una nueva vista", () => {
   expect(primeraConsulta).not.toBe(segundaConsulta);
   expect(primeraConsulta[0]).not.toBe(segundaConsulta[0]);
 });
+
+test("la inspección de memoria devuelve una copia independiente", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 200, 3);
+
+  simulador.configurar(1000, 2);
+  simulador.registrarProceso(proceso);
+
+  const bloques = simulador.obtenerBloquesMemoria();
+  const bloque = bloques[0];
+
+  if (bloque === undefined) {
+    throw new Error("No se encontró el bloque de memoria");
+  }
+
+  expect(bloque.pid).toBe(1);
+
+  const bloquesNuevos = simulador.obtenerBloquesMemoria();
+
+  expect(bloquesNuevos[0]?.pid).toBe(1);
+  expect(bloquesNuevos[0]).not.toBe(bloque);
+});
