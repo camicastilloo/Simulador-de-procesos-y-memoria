@@ -87,6 +87,15 @@ export class Proceso implements IProceso {
     }
   }
   configurarBloqueoCPU(ticksCPU: number, duracion: number): void {
+  if (
+    !Number.isInteger(ticksCPU) ||
+    ticksCPU <= 0 ||
+    !Number.isInteger(duracion) ||
+    duracion <= 0
+  ) {
+    throw new Error("Los parámetros de bloqueo deben ser enteros positivos");
+  }
+
   this.ticksParaBloqueo = ticksCPU;
   this.duracionBloqueo = duracion;
 }

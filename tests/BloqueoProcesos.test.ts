@@ -99,4 +99,15 @@ test("bloquea por CPU aunque el quantum haya vencido antes", () => {
 
   expect(proceso.obtenerEstado()).toBe(EstadoProceso.BLOQUEADO);
 });
+
+test("rechaza una configuración de bloqueo inválida", () => {
+  const proceso = new Proceso(1, 200, 5);
+
+  expect(() => proceso.configurarBloqueoCPU(0, 2)).toThrow();
+  expect(() => proceso.configurarBloqueoCPU(2, 0)).toThrow();
+  expect(() => proceso.configurarBloqueoCPU(-1, 2)).toThrow();
+  expect(() => proceso.configurarBloqueoCPU(2, -1)).toThrow();
+  expect(() => proceso.configurarBloqueoCPU(1.5, 2)).toThrow();
+  expect(() => proceso.configurarBloqueoCPU(2, 1.5)).toThrow();
+});
 });
