@@ -105,4 +105,17 @@ test("ignora la liberación de un proceso no asignado", () => {
   expect(bloquesDespues[0]?.obtenerProceso()).toBe(proceso1);
   expect(bloquesDespues[1]?.estaLibre()).toBe(true);
 });
+
+test("asigna un bloque exacto sin crear un bloque de tamaño cero", () => {
+  const gestor = new GestorMemoria(500, new FirstFit());
+  const proceso = new Proceso(1, 500, 5);
+
+  expect(gestor.asignarMemoria(proceso)).toBe(true);
+
+  const bloques = gestor.obtenerBloques();
+
+  expect(bloques).toHaveLength(1);
+  expect(bloques[0]?.obtenerTamanio()).toBe(500);
+  expect(bloques[0]?.obtenerProceso()).toBe(proceso);
+});
 });
