@@ -122,4 +122,25 @@ test("finaliza el proceso y libera el CPU", () => {
   expect(planificador.obtenerProcesoActual()).toBe(null);
 });
 
+test("no despacha si ya hay un proceso ejecutando", () => {
+  const planificador = new PlanificadorCPU();
+  const proceso1 = new Proceso(1, 100, 5);
+  const proceso2 = new Proceso(2, 100, 5);
+
+  planificador.agregarProceso(proceso1);
+  planificador.agregarProceso(proceso2);
+
+  planificador.despachar();
+  planificador.despachar();
+
+  expect(planificador.obtenerProcesoActual()).toBe(proceso1);
+  expect(planificador.obtenerColaListos()).toEqual([proceso2]);
+});
+
+test("no ejecuta una unidad si no hay proceso actual", () => {
+  const planificador = new PlanificadorCPU();
+
+  expect(() => planificador.ejecutarUnidad()).not.toThrow();
+  expect(planificador.obtenerProcesoActual()).toBe(null);
+});
 });
