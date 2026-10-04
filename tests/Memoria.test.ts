@@ -86,4 +86,23 @@ test("libera el bloque ocupado por un proceso", () => {
   expect(bloques[0]?.obtenerTamanio()).toBe(1000);
   expect(bloques[0]?.estaLibre()).toBe(true);
 });
+
+test("ignora la liberación de un proceso no asignado", () => {
+  const gestor = new GestorMemoria(1000, new FirstFit());
+
+  const proceso1 = new Proceso(1, 300, 5);
+  const proceso2 = new Proceso(2, 200, 5);
+
+  gestor.asignarMemoria(proceso1);
+
+  const bloquesAntes = gestor.obtenerBloques();
+
+  gestor.liberarMemoria(proceso2);
+
+  const bloquesDespues = gestor.obtenerBloques();
+
+  expect(bloquesDespues).toHaveLength(bloquesAntes.length);
+  expect(bloquesDespues[0]?.obtenerProceso()).toBe(proceso1);
+  expect(bloquesDespues[1]?.estaLibre()).toBe(true);
+});
 });
