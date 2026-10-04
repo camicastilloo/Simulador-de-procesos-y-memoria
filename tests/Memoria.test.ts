@@ -71,4 +71,19 @@ test("rechaza una asignación si no hay un bloque suficientemente grande", () =>
   );
   expect(proceso2.obtenerEstado()).toBe(EstadoProceso.NUEVO);
 });
+
+test("libera el bloque ocupado por un proceso", () => {
+  const gestor = new GestorMemoria(1000, new FirstFit());
+  const proceso = new Proceso(1, 300, 5);
+
+  gestor.asignarMemoria(proceso);
+  gestor.liberarMemoria(proceso);
+
+  const bloques = gestor.obtenerBloques();
+
+  expect(bloques).toHaveLength(1);
+  expect(bloques[0]?.obtenerInicio()).toBe(0);
+  expect(bloques[0]?.obtenerTamanio()).toBe(1000);
+  expect(bloques[0]?.estaLibre()).toBe(true);
+});
 });
