@@ -143,4 +143,33 @@ test("no ejecuta una unidad si no hay proceso actual", () => {
   expect(() => planificador.ejecutarUnidad()).not.toThrow();
   expect(planificador.obtenerProcesoActual()).toBe(null);
 });
+
+test("no finaliza si no hay proceso actual", () => {
+  const planificador = new PlanificadorCPU();
+
+  expect(planificador.finalizoProceso()).toBe(false);
+
+  planificador.finalizarProceso();
+
+  expect(planificador.obtenerProcesoActual()).toBe(null);
+});
+
+test("no bloquea si no hay proceso actual", () => {
+  const planificador = new PlanificadorCPU();
+
+  planificador.bloquearProceso(3);
+
+  expect(planificador.obtenerProcesoActual()).toBe(null);
+  expect(planificador.obtenerCambiosContexto()).toBe(0);
+});
+
+test("no realiza acciones de quantum si no hay proceso actual", () => {
+  const planificador = new PlanificadorCPU();
+
+  expect(planificador.quantumVencido()).toBe(false);
+  planificador.reencolarPorQuantum();
+  planificador.renovarQuantum();
+
+  expect(planificador.obtenerProcesoActual()).toBe(null);
+});
 });

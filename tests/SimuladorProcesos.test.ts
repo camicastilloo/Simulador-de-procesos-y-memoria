@@ -244,4 +244,21 @@ test("rechaza registrar un proceso que supera la memoria disponible", () => {
 
   expect(() => simulador.registrarProceso(proceso)).toThrow();
 });
+
+test("rechaza operaciones si el simulador no está configurado", () => {
+  const simulador = new SimuladorProcesos();
+
+  expect(() => simulador.tick()).toThrow();
+  expect(() => simulador.registrarProceso(new Proceso(1, 100, 5))).toThrow();
+
+  expect(simulador.obtenerMemoria()).toBe(0);
+  expect(simulador.obtenerProcesoCPU()).toBe(null);
+  expect(simulador.obtenerOcupacionMemoria()).toBe(0);
+});
+
+test("devuelve cero si la memoria total es cero", () => {
+  const simulador = new SimuladorProcesos();
+
+  expect(simulador.obtenerFragmentacionExterna()).toBe(0);
+});
 });
