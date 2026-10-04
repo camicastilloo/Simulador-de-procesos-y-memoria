@@ -21,6 +21,7 @@
   "homepage": "https://github.com/camicastilloo/Simulador-de-procesos-y-memoria#readme",
   "devDependencies": {
     "@types/node": "^26.6.3",
+    "@vitest/coverage-v8": "^5.0.3",
     "typescript": "^7.0.2",
     "vitest": "^5.0.3"
   }
