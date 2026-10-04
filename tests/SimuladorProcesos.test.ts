@@ -225,4 +225,23 @@ test("reinicia el estado al reconfigurar el simulador", () => {
   expect(simulador.obtenerOcupacionMemoria()).toBe(0);
   expect(simulador.obtenerUtilizacionCPU()).toBe(0);
 });
+
+test("no hace nada al ejecutar un tick sin procesos", () => {
+  const simulador = new SimuladorProcesos();
+
+  simulador.configurar(1000, 2);
+  simulador.tick();
+
+  expect(simulador.obtenerTick()).toBe(1);
+  expect(simulador.obtenerProcesoCPU()).toBe(null);
+});
+
+test("rechaza registrar un proceso que supera la memoria disponible", () => {
+  const simulador = new SimuladorProcesos();
+  const proceso = new Proceso(1, 1200, 5);
+
+  simulador.configurar(1000, 2);
+
+  expect(() => simulador.registrarProceso(proceso)).toThrow();
+});
 });
